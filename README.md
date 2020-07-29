@@ -10,5 +10,5 @@ This code computes the error between similar poses of two distinct odometry traj
 ### Output files
 - reloc_error.txt: relocalization errors of each area (translation and rotation)
 - statistics.txt: relocalization errors statistics (max, mean, min)
-- gicp_reloc_error.txt [IF (G)ICP alignment is used]: relocalization errors after (G)ICP alignment
+- gicp_reloc_error.txt [if (G)ICP alignment is used]: relocalization errors after (G)ICP alignment
 
