@@ -1,5 +1,5 @@
 # Relocalization Evaluation Code
-This code computes the error between similar poses of two distinct odometry trajectories. The translation and rotation errors are computed relative to a given ground truth. 
+This code computes the error between given poses of two distinct odometry trajectories. The translation and rotation errors are computed relative to a given ground truth. Also, it is possible to activate a preliminary pose refinement via (G)ICP alignment of the current point cloud to the map point cloud. 
 
 ### Input files
 - Trajectories bags [mandatory]: they should contain the odometry and ground truth poses to be compared 
