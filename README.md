@@ -14,10 +14,11 @@ This code computes the error between given poses of two distinct odometry trajec
 
 
 ### Building instructions
-
+```
 cd relocalization_evaluation
 mkdir build
 cd build
 cmake ..
 make
+```
 
