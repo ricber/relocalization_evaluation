@@ -7,3 +7,12 @@
 
 ### Output files
 
+
+### Building instructions
+
+cd relocalization_evaluation
+mkdir build
+cd build
+cmake ..
+make
+
