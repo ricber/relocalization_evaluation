@@ -60,19 +60,19 @@ inline double rad2deg(double angle)
 
 int main (int argc, char** argv)
 {    
-    const std::string traj1_bag_name = "../input/2020-06-17-traj1-benchmarking.bag"; // bags containing the odometry and ground truth
-    const std::string traj2_bag_name = "../input/2020-06-17-traj2-benchmarking.bag";
+    const std::string traj1_bag_name = "../input/2020-10-28-traj1-benchmarking-w_floor.bag"; // bags containing the odometry and ground truth
+    const std::string traj2_bag_name = "../input/2020-10-28-traj2-benchmarking-w_floor.bag";
     const std::string traj1_points_bag_name = "../input/2020-03-18-17-05-05-traj1-ouster-realsense.bag"; // bags containing the sensor's pointclouds
     const std::string traj2_points_bag_name = "../input/2020-03-18-17-10-55-traj2-ouster-realsense.bag";
     const std::string timestamps_file_name = "../input/timestamps.txt"; // selected poses
     const std::string odometry_topic = "/odom"; 
-    const std::string ground_truth_topic = "/Robot_1/pose";
+    const std::string ground_truth_topic; //= "/Robot_1/pose";
     const std::string point_cloud_topic = "/os1_cloud_node/points";
     const std::string map_name = "../input/map.pcd";
-    const int n_poses = 10;
+    const int n_poses = 11; // 10
     const bool improve_alignment = false;
     const bool bool_visualize = false;
-    const bool no_ground_truth = false;
+    const bool no_ground_truth = true;
 
     
     // -------- READ POSES, QUATERNIONS, AND TIMESTAMPS FROM FILES --------
@@ -126,7 +126,14 @@ int main (int argc, char** argv)
     // -------- COMPUTE RELOCALIZATION ERROR --------
 
     std::cout << "\n----  RELOCALIZATION ERROR  ----\n";
-    print_relocalization_error("../output/reloc_error.txt", n_poses, poseO1, quatO1, poseO2, quatO2, poseG1, quatG1, poseG2, quatG2);
+    if (no_ground_truth)
+    {
+		std::vector<std::vector<double> > pose_empty, quat_empty;
+		print_relocalization_error("../output/reloc_error.txt", n_poses, poseO1, quatO1, poseO2, quatO2, pose_empty, quat_empty, pose_empty, quat_empty);
+	} else
+	{
+		print_relocalization_error("../output/reloc_error.txt", n_poses, poseO1, quatO1, poseO2, quatO2, poseG1, quatG1, poseG2, quatG2);
+	}    
     
     
     // -------- COMPUTE RELOCALIZATION ERROR WITH IMPROVED ALIGNMENT --------
@@ -160,7 +167,7 @@ void print_relocalization_error(const std::string& file_name, const unsigned int
     {
         std::cout << "\n### Area " << i+1 << " ###\n";
         Eigen::Matrix4d E;
-        if (poseG1.size() != n_poses)
+        if (poseG1.empty())
         {
 			std::vector<double> quat_empty, pose_empty;
 			E = relocalization_error(poseO1[i], quatO1[i], poseO2[i], quatO2[i], pose_empty, quat_empty, pose_empty, quat_empty);
@@ -335,13 +342,10 @@ Eigen::Matrix4d relocalization_error(std::vector<double>& poseO1, std::vector<do
     
     Quaterniond eigen_quatO1{quatO1[0], quatO1[1], quatO1[2], quatO1[3]};
     Quaterniond eigen_quatO2{quatO2[0], quatO2[1], quatO2[2], quatO2[3]};
-    Quaterniond eigen_quatG1{quatG1[0], quatG1[1], quatG1[2], quatG1[3]};
-    Quaterniond eigen_quatG2{quatG2[0], quatG2[1], quatG2[2], quatG2[3]};
     
     Vector3d eigen_poseO1{poseO1[0], poseO1[1], poseO1[2]};
     Vector3d eigen_poseO2{poseO2[0], poseO2[1], poseO2[2]};
-    Vector3d eigen_poseG1{poseG1[0], poseG1[1], poseG1[2]};
-    Vector3d eigen_poseG2{poseG2[0], poseG2[1], poseG2[2]};
+ 
        
     // ### estimated poses ###
     Matrix4d TO1{Matrix4d::Identity()};
@@ -355,6 +359,13 @@ Eigen::Matrix4d relocalization_error(std::vector<double>& poseO1, std::vector<do
     
     if (!poseG1.empty())
     {
+		Quaterniond eigen_quatG1{quatG1[0], quatG1[1], quatG1[2], quatG1[3]};
+		Quaterniond eigen_quatG2{quatG2[0], quatG2[1], quatG2[2], quatG2[3]};
+    
+		Vector3d eigen_poseG1{poseG1[0], poseG1[1], poseG1[2]};
+		Vector3d eigen_poseG2{poseG2[0], poseG2[1], poseG2[2]};
+		
+		
 		// ### ground truth ###
 		Matrix4d TG1{Matrix4d::Identity()};
 		TG1.block<3,1>(0,3) = eigen_poseG1;
