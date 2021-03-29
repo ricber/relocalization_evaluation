@@ -12,6 +12,7 @@ This code computes the error between given poses of two distinct odometry trajec
 - statistics.txt: relocalization errors statistics (max, mean, min).
 - gicp_reloc_error.txt [if (G)ICP alignment is used]: relocalization errors after (G)ICP alignment.
 
+The output files are printed in a format to be directly copied and pasted in a LaTeX table :)
 
 ### Building instructions
 ```
