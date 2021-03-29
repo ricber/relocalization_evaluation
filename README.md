@@ -36,7 +36,7 @@ Once you have created and filled the directories, you need to modify the configu
 - [optional] **traj2_points_bag_name**: the path of the .bag file containing the point cloud messages related to the second trajectory
 - [mandatory] **timestamps_file_name**: the path of the ```timestamps.txt``` file, filled as specified above
 - [mandatory] **odometry_topic**: the name of the odometry topic as in the ```traj*_bag_name``` bag
-- [mandatory] **ground_truth_topic**: the name of the ground truth topic as in the ```traj*_bag_name``` bag; in case you want to compute the error without the ground truth, do not initialize this parameter (```const std::string ground_truth_topic;```) and set the ```no_ground_truth parameter``` to ```true```
+- [mandatory] **ground_truth_topic**: the name of the ground truth topic as in the ```traj*_bag_name``` bag; in case you want to compute the error without the ground truth, do not initialize this parameter (```const std::string ground_truth_topic;```) and set the ```no_ground_truth``` parameter to ```true```
 - [optional] **point_cloud_topic**: the name of the point cloud topic as in the ```traj*_points_bag_name``` bag
 - [optional] **map_name**: the path of the .pcd file containing the map onto which align the point clouds
 - [mandatory] **n_poses**: the number of poses of a single trajectory for which you want to compute the relocalization error; this number should match the number of timestamps in the ```timestamps.txt``` file 
